@@ -11,5 +11,10 @@ module Types
     def user(id:)
       User.find(id)
     end
+
+    field :posts, [Types::PostType], null: false
+    def posts
+      Post.all
+    end
   end
 end

@@ -80,7 +80,7 @@ app/assets/config/manifest.jsに以下を追記
 
 graphql/type/query_type.rb
 
-```
+```ruby:query_type.rb
 module Types
   class QueryType < Types::BaseObject
     # Add `node(id: ID!) and `nodes(ids: [ID!]!)`
@@ -149,7 +149,10 @@ $ docker-compose exec app rails g graphql:mutation CreateUser
 ```
 
 案内に従って以下を追記
-```
+
+app/graphql/mutations/create_user.rb
+
+```ruby:create_user.rb
 module Mutations
   class CreateUser < BaseMutation
     field :user, Types::UserType, null: true
@@ -173,7 +176,9 @@ Update
 $ docker-compose exec app rails g graphql:mutation UpdateUser
 ```
 
-```
+app/graphql/mutations/update_user.rb
+
+```ruby:update_user.rb
 module Mutations
   class UpdateUser < BaseMutation
     field :user, Types::UserType, null: true
@@ -199,7 +204,9 @@ Delete
 $ docker-compose exec app rails g graphql:mutation DeleteUser
 ```
 
-```
+app/graphql/mutations/delete_user.rb
+
+```ruby:delete_user.rb
 module Mutations
   class DeleteUser < BaseMutation
     field :user, Types::UserType, null: true
@@ -285,14 +292,15 @@ $ Label.create(name: "LabelA", post: Post.find(1))
 ```
 
 app/models/user.rb
-```
+
+```ruby:user.rb
 class User < ApplicationRecord
   has_many :posts
 end
 ```
 
 app/models/post.rb
-```
+```ruby:post.rb
 class Post < ApplicationRecord
   belongs_to :user
   has_one :label
@@ -300,7 +308,7 @@ end
 ```
 
 app/models/label.rb
-```
+```ruby:label.rb
 class Label < ApplicationRecord
   belongs_to :post
 end
@@ -309,12 +317,22 @@ end
 追記
 
 app/graphql/types/post_type.rb
-```
-field :label, LabelType, null: true
+```ruby:post_type.rb
+module Types
+  class PostType < Types::BaseObject
+    field :id, ID, null: false
+    field :user_id, Integer, null: false
+    # 追記
+    field :label, LabelType, null: true
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+  end
+end
 ```
 
 app/graphql/types/query_type.rb 
-```
+```ruby:query_type.rb
+# 追記
 field :posts, [Types::PostType], null: false
 def posts
   Post.all
@@ -373,7 +391,7 @@ $ docker-compose exec app bundle i
 ```
 
 app/graphql/rails_graphql_schema.rb 
-```
+```ruby:rails_graphql_schema.rb
 class RailsGraphqlSchema < GraphQL::Schema
   mutation(Types::MutationType)
   query(Types::QueryType)
@@ -393,7 +411,7 @@ $ touch app/graphql/loaders/association_loader.rb
 
 app/graphql/loaders/association_loader.rb
 
-```
+```ruby:association_loader.rb
 module Loaders
   class AssociationLoader < GraphQL::Batch::Loader
     def self.validate(model, association_name)
@@ -450,7 +468,7 @@ end
 
 app/graphql/types/query_type.rb  
 
-```
+```ruby:query_type.rb
 module Types
   class UserType < Types::BaseObject
     field :id, ID, null: false

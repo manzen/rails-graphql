@@ -65,19 +65,6 @@ end
 
 CRUDのRの部分
 
-Routeに以下を追記し、再起動
-```
-if Rails.env.development?
-  mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql'
-end
-```
-
-app/assets/config/manifest.jsに以下を追記
-```
-//= link graphiql/rails/application.css
-//= link graphiql/rails/application.js
-```
-
 graphql/type/query_type.rb
 
 ```ruby:query_type.rb
@@ -115,6 +102,19 @@ end
 ```
 
 ## Query Test
+
+Routeに以下を追記し、再起動
+```
+if Rails.env.development?
+  mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql'
+end
+```
+
+app/assets/config/manifest.jsに以下を追記
+```
+//= link graphiql/rails/application.css
+//= link graphiql/rails/application.js
+```
 
 [http://localhost:3000/graphiql](http://localhost:3000/graphiql)へアクセスし、以下のクエリを投げる
 

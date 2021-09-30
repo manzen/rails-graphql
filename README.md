@@ -485,5 +485,60 @@ module Types
     end
   end
 end
+```
+
+## API DOC
+
+add gem
+```
+gem 'graphdoc-ruby'
+```
+
+add npm install
+
+Dockerfile
+
+```Dockerfile:Dockerfile
+RUN set -ex \
+  && apt-get update \
+  && apt-get install -y curl gnupg vim imagemagick\
+  && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+  && apt-get install -y nodejs default-libmysqlclient-dev build-essential \
+  && gem install bundler \
+  && npm install -g @2fd/graphdoc # 追記
+```
+
+再ビルド
 
 ```
+$ docker-compose build
+```
+
+Routeに以下を追記し、再起動
+```ruby:routes.rb
+if Rails.env.development?
+  mount GraphdocRuby::Application, at: 'graphdoc'
+end
+```
+
+config initializer
+
+```
+$ touch config/initializers/graphdoc.rb
+```
+
+```ruby:graphdoc.rb
+GraphdocRuby.configure do |config|
+  config.schema_name = 'RailsGraphqlSchema'
+  config.endpoint = Rails.root.join('tmp', 'graphql', 'schema.json')
+  config.output_directory = Rails.root.join('tmp', 'graphdoc')
+end
+```
+
+再起動
+
+```
+$ docker-compose up
+```
+
+[http://localhost:3000/graphdoc](http://localhost:3000/graphdoc)へアクセス

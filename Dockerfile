@@ -11,7 +11,8 @@ RUN set -ex \
   && apt-get install -y curl gnupg vim imagemagick\
   && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
   && apt-get install -y nodejs default-libmysqlclient-dev build-essential \
-  && gem install bundler
+  && gem install bundler \
+  && npm install -g @2fd/graphdoc
 
 COPY Gemfile ${ROOT}
 COPY Gemfile.lock ${ROOT}

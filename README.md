@@ -314,7 +314,10 @@ class Label < ApplicationRecord
 end
 ```
 
-追記
+```
+$ docker-compose exec app rails g graphql:object Post
+$ docker-compose exec app rails g graphql:object Label
+```
 
 app/graphql/types/post_type.rb
 ```ruby:post_type.rb

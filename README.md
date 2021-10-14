@@ -47,7 +47,7 @@ $ docker-compose exec app rails g graphql:object User
 
 すでにDBに定義が存在すれば自動でfieldを生成
 
-graphql/type/user_type.rb
+graphql/types/user_type.rb
 
 ```ruby:user_type.rb
 module Types
@@ -78,7 +78,7 @@ app/assets/config/manifest.jsに以下を追記
 //= link graphiql/rails/application.js
 ```
 
-graphql/type/query_type.rb
+graphql/types/query_type.rb
 
 ```ruby:query_type.rb
 module Types
